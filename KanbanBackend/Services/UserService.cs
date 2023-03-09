@@ -66,7 +66,7 @@ namespace KanbanBackend.Services
                             var newUser = new users
                             {
                                 user_name = user.User_name,
-                                user_password = PasswordHasher.Hash(user.User_password),
+                                user_password = PasswordHasher.Hash(user.User_password, _config["Salt"]),
                                 user_email = user.User_email
                             };
 
@@ -96,20 +96,25 @@ namespace KanbanBackend.Services
         {
             var currentUser = new UserLogin();
 
-            if (!await _dataContext.users.AnyAsync(u => u.user_name == username, cancellationToken))
+            if (await _dataContext.users.AnyAsync(u => u.user_name == username, cancellationToken))
             {
-                currentUser.ErrorMessage = "Такого пользователя не существует! Проверьте введённые данные";
-            }
-            else if (!await _dataContext.users.AnyAsync(u => u.user_password == password, cancellationToken))
-            {
-                currentUser.ErrorMessage = "Неверный пароль! Проверьте введённые данные";
+                password = PasswordHasher.Hash(password, _config["Salt"]);
+
+                if (await _dataContext.users.AnyAsync(u => u.user_password == password, cancellationToken))
+                {
+                    currentUser.User_name = username;
+                    currentUser.User_password = password;
+                }
+                else
+                {
+                    currentUser.ErrorMessage = "Неверный пароль! Проверьте введённые данные";
+                }
             }
             else
             {
-                currentUser.User_name = username;
-                currentUser.User_password = password;
+                currentUser.ErrorMessage = "Такого пользователя не существует! Проверьте введённые данные";
             }
-
+            
             return currentUser;           
         }
     }
