@@ -14,16 +14,18 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<UserService>();
 
+var config = builder.Configuration.GetSection("JWT");
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = AuthOptions.ISSUER,
+        ValidIssuer = config["Issuer"],
         ValidateAudience = true,
-        ValidAudience = AuthOptions.AUDIENCE,
+        ValidAudience = config["Audience"],
         ValidateLifetime = true,
-        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Key"])),
         ValidateIssuerSigningKey = true,
     }
 );
