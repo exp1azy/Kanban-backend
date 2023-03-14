@@ -14,6 +14,7 @@ namespace KanbanBackend.Controllers
 {
     [ApiController]
     [Route("kanban")]
+    [AllowAnonymous]
     public class UserController : Controller
     {
         private readonly UserService _userService;
@@ -22,24 +23,23 @@ namespace KanbanBackend.Controllers
         {
             _userService = userService;
         }
-
-        [AllowAnonymous]
+       
         [HttpPost("login")]
         public async Task<IActionResult> Login(string username, string password, CancellationToken cancellationToken)
         {
-            var user = await _userService.AuthenticateUserAsync(username, password, cancellationToken);
+            var response = await _userService.AuthenticateUserAsync(username, password, cancellationToken);
 
-            if (user.ErrorMessage.IsNullOrEmpty())
+            if (response.ErrorMessage.IsNullOrEmpty())
             {
-                var token = _userService.GenerateToken(user);
+                var token = _userService.GenerateToken(response);
                 return Ok(token);
             }
 
-            return Unauthorized(user.ErrorMessage);
+            return Unauthorized(response.ErrorMessage);
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Add(UserModel user, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(UserModel user, CancellationToken cancellationToken)
         {
             var response = await _userService.AddUserAsync(user, cancellationToken);
 

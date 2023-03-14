@@ -1,5 +1,6 @@
 using KanbanBackend.Data;
 using KanbanBackend.Services;
+using KanbanBackend.Startup;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -8,11 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>();
 
+builder.AddSwagger();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<BoardService>();
 
 var config = builder.Configuration.GetSection("JWT");
 
@@ -27,6 +30,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateLifetime = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Key"])),
         ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero
     }
 );
 
