@@ -1,19 +1,14 @@
-﻿using KanbanBackend.Data;
-using KanbanBackend.Models;
+﻿using KanbanBackend.Models;
 using KanbanBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace KanbanBackend.Controllers
 {
     [ApiController]
     [Route("kanban")]
+    [AllowAnonymous]
     public class UserController : Controller
     {
         private readonly UserService _userService;
@@ -22,33 +17,36 @@ namespace KanbanBackend.Controllers
         {
             _userService = userService;
         }
-
-        [AllowAnonymous]
+       
         [HttpPost("login")]
         public async Task<IActionResult> Login(string username, string password, CancellationToken cancellationToken)
         {
-            var user = await _userService.AuthenticateUserAsync(username, password, cancellationToken);
-
-            if (user.ErrorMessage.IsNullOrEmpty())
+            try
             {
-                var token = _userService.GenerateToken(user);
+                var response = await _userService.AuthenticateUserAsync(username, password, cancellationToken);
+                var token = _userService.GenerateToken(response);
+
                 return Ok(token);
             }
-
-            return Unauthorized(user.ErrorMessage);
+            catch (ApplicationException e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Add(UserModel user, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(UserModel user, CancellationToken cancellationToken)
         {
-            var response = await _userService.AddUserAsync(user, cancellationToken);
-
-            if (!response.ErrorMessage.IsNullOrEmpty())
+            try
             {
-                return BadRequest(response.ErrorMessage);
+                await _userService.AddUserAsync(user, cancellationToken);
+            }
+            catch (ApplicationException e)
+            {
+                return BadRequest(e.Message);
             }
 
-            return Ok(response);
+            return Ok();
         }     
     }
 }

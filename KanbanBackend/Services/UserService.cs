@@ -1,13 +1,9 @@
 ﻿using KanbanBackend.Data;
 using KanbanBackend.Models;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -24,95 +20,91 @@ namespace KanbanBackend.Services
             _config = config;
         }
     
-        public string GenerateToken(UserLogin user)
+        public string GenerateToken(UserLoginModel user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.User_name)
+                new Claim(ClaimTypes.Name, user.User_name),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var token = new JwtSecurityToken(_config["JWT:Issuer"], _config["JWT:Audience"], claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(60)),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<AddUserModel> AddUserAsync(UserModel user, CancellationToken cancellationToken)
+        public async Task AddUserAsync(UserModel user, CancellationToken cancellationToken)
         {
-            var addUser = new AddUserModel();
-
-            if (Regex.IsMatch(user.User_name, @"^[a-zA-Z]{4,}$"))
+            if (Regex.IsMatch(user.Name, @"^[a-zA-Z]{4,}$"))
             {
-                if (Regex.IsMatch(user.User_password, @"^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$"))
+                if (Regex.IsMatch(user.Password, @"^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$"))
                 {
-                    if (Regex.IsMatch(user.User_email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"))
+                    if (Regex.IsMatch(user.Email, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"))
                     {
-                        if (await _dataContext.users.AnyAsync(u => u.user_name == user.User_name, cancellationToken))
+                        if (await _dataContext.User.AnyAsync(u => u.UserName == user.Name, cancellationToken))
                         {
-                            addUser.ErrorMessage = "Пользователь с таким логином уже существует!";
+                            throw new ApplicationException("Пользователь с таким логином уже существует!");
                         }
-                        else if (await _dataContext.users.AnyAsync(u => u.user_email == user.User_email, cancellationToken))
+                        if (await _dataContext.User.AnyAsync(u => u.UserEmail == user.Email, cancellationToken))
                         {
-                            addUser.ErrorMessage = "Пользователь с такой почтой уже существует!";
+                             throw new ApplicationException("Пользователь с такой почтой уже существует!");
                         }
-                        else
+                        
+                        var newUser = new User()
                         {
-                            addUser.User = user;
+                            UserName = user.Name,
+                            UserPassword = PasswordHasher.Hash(user.Password, _config["Salt"]),
+                            UserEmail = user.Email
+                        };
 
-                            var newUser = new users
-                            {
-                                user_name = user.User_name,
-                                user_password = PasswordHasher.Hash(user.User_password, _config["Salt"]),
-                                user_email = user.User_email
-                            };
-
-                            await _dataContext.users.AddAsync(newUser, cancellationToken);
-                            await _dataContext.SaveChangesAsync(cancellationToken);
-                        }
+                        await _dataContext.User.AddAsync(newUser, cancellationToken);
+                        await _dataContext.SaveChangesAsync(cancellationToken);
                     }
                     else
                     {
-                        addUser.ErrorMessage = "Некорректный email-адрес!";
+                        throw new ApplicationException("Некорректный email-адрес!");
                     }
                 }
                 else
                 {
-                    addUser.ErrorMessage = "Пароль должен содержать только символы английского алфавита и хотя бы одну цифру, а также состоять хотя бы из 6 символов!";
+                    throw new ApplicationException("Пароль должен содержать только символы английского алфавита и хотя бы одну цифру, а также состоять хотя бы из 6 символов!");
                 }
             }
             else
             {
-                addUser.ErrorMessage = "Никнейм должен содержать только символы английского алфавита и состоять хотя бы из четырёх символов!";
+                throw new ApplicationException("Никнейм должен содержать только символы английского алфавита и состоять хотя бы из четырёх символов!");
             }
-
-            return addUser;
         }
 
-        public async Task<UserLogin> AuthenticateUserAsync(string username, string password, CancellationToken cancellationToken)
+        public async Task<UserLoginModel> AuthenticateUserAsync(string username, string password, CancellationToken cancellationToken)
         {
-            var currentUser = new UserLogin();
+            var currentUser = new UserLoginModel();
 
-            if (await _dataContext.users.AnyAsync(u => u.user_name == username, cancellationToken))
+            var dalUser = await _dataContext.User.FirstOrDefaultAsync(u => u.UserName == username, cancellationToken);
+
+            if (dalUser != null)
             {
                 password = PasswordHasher.Hash(password, _config["Salt"]);
 
-                if (await _dataContext.users.AnyAsync(u => u.user_password == password, cancellationToken))
+                if (password == dalUser.UserPassword)
                 {
+                    currentUser.Id = dalUser.UserId;
                     currentUser.User_name = username;
                     currentUser.User_password = password;
                 }
                 else
                 {
-                    currentUser.ErrorMessage = "Неверный пароль! Проверьте введённые данные";
+                    throw new ApplicationException("Неверный пароль! Проверьте введённые данные");
                 }
             }
             else
             {
-                currentUser.ErrorMessage = "Такого пользователя не существует! Проверьте введённые данные";
+                throw new ApplicationException("Такого пользователя не существует! Проверьте введённые данные");
             }
             
             return currentUser;           

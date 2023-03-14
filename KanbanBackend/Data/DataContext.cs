@@ -12,8 +12,10 @@ namespace KanbanBackend.Data
             Database.EnsureCreated();
         }
 
-        public DbSet<users> users { get; set; }
-        public DbSet<сards> cards { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Card> Card { get; set; }
+        public DbSet<Board> Board { get; set; } 
+        public DbSet<BoardColumn> BoardColumn { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
