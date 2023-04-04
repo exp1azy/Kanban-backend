@@ -26,8 +26,8 @@ namespace KanbanBackend.Controllers
 
             if (boards != null)
             {
-                return Ok(boards);
-            }
+            return Ok(boards);
+        }
 
             return NoContent();
         }

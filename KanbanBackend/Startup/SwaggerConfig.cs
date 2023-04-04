@@ -7,13 +7,15 @@ namespace KanbanBackend.Startup
     {
         public static void AddSwagger(this WebApplicationBuilder builder)
         {
+
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(builder.Configuration["AppVersion"], new OpenApiInfo 
-                {
-                    Title = builder.Configuration["AppTitle"],
-                    Version = builder.Configuration["AppVersion"]
+                    {
+                        Title = builder.Configuration["AppTitle"],
+                        Version = builder.Configuration["AppVersion"]
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
