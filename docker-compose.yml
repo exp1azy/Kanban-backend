@@ -1,0 +1,33 @@
+version: '3.4'
+
+networks:
+  mynetwork:
+     driver: bridge
+
+services:
+  kanbanbackend:
+    image: ${DOCKER_REGISTRY-}kanbanbackend
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    build:
+      context: .
+      dockerfile: KanbanBackend/Dockerfile
+    networks: 
+      - mynetwork
+
+  postgres:
+    image: postgres:latest
+    container_name: postgresql_kanban
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=Kanban
+    ports:
+      - 5433:5432
+    restart: always
+    volumes:
+      - ./KanbanBackend/inidb:/docker-entrypoint-initdb.d
+    networks:
+      - mynetwork
