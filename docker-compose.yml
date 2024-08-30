@@ -1,0 +1,20 @@
+services:
+  kanban.server:
+    image: ${DOCKER_REGISTRY-}kanbanserver
+    build:
+      context: .
+      dockerfile: Kanban.Server/Dockerfile
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: kanban
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
