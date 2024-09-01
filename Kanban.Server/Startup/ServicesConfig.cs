@@ -10,8 +10,12 @@ namespace Kanban.Server.Startup
         public static void AddServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<IBoardRepository, BoardRepository>();
+            builder.Services.AddTransient<IColumnRepository, ColumnRepository>();
+            builder.Services.AddTransient<ICardRepository, CardRepository>();
 
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IKanbanService, KanbanService>();
         }
     }
 }

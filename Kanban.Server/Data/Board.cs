@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Migrations.Operations.Builders;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kanban.Server.Data
@@ -13,5 +14,7 @@ namespace Kanban.Server.Data
         [Column("name")] public string Name { get; set; }
 
         [Column("created")] public DateTime Created { get; set; }
+
+        public ICollection<Column> Columns { get; set; }
     }
 }

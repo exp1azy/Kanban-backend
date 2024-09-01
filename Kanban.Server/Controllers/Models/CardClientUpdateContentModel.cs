@@ -1,8 +1,8 @@
 ﻿namespace Kanban.Server.Controllers.Models
 {
-    public class CardClientUpdateModel
+    public class CardClientUpdateContentModel
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
 
         public string? Content { get; set; }
     }

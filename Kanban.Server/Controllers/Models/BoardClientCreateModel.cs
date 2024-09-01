@@ -1,6 +1,6 @@
 ﻿namespace Kanban.Server.Controllers.Models
 {
-    public class BoardClientModel
+    public class BoardClientCreateModel
     {
         public int UserId { get; set; }
 

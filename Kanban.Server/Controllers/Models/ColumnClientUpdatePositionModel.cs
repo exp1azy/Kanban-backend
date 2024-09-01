@@ -1,8 +1,8 @@
 ﻿namespace Kanban.Server.Controllers.Models
 {
-    public class ColumnClientUpdateModel
+    public class ColumnClientUpdatePositionModel
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
 
         public int Position { get; set; }
     }

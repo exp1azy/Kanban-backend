@@ -1,4 +1,6 @@
-﻿namespace Kanban.Server.Models
+﻿using Kanban.Server.Data;
+
+namespace Kanban.Server.Models
 {
     public class ColumnFullModel
     {
@@ -11,5 +13,14 @@
         public int Position { get; set; }
 
         public List<CardModel> Cards { get; set; }
+
+        public static ColumnFullModel? Map(Column column) => column == null ? null : new ColumnModel
+        {
+            Id = column.Id,
+            BoardId = column.BoardId,
+            Name = column.Name,
+            Position = column.Position,
+            Cards = new List<CardModel>().AddRange(column.Cards.Select(CardModel.Map))
+        };
     }
 }

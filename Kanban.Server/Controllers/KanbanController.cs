@@ -19,13 +19,13 @@ namespace Kanban.Server.Controllers
         }
 
         [HttpPost("board")]
-        public async Task<IActionResult> CreateBoard([FromBody] BoardClientModel board, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateBoard([FromBody] BoardClientCreateModel board, CancellationToken cancellationToken)
         {
             return Ok();
         }
 
         [HttpPatch("board")]
-        public async Task<IActionResult> UpdateBoardName([FromBody] string newBoardName, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateBoardName([FromBody] BoardClientUpdateModel board, CancellationToken cancellationToken)
         {
             return Ok();
         }
@@ -42,8 +42,14 @@ namespace Kanban.Server.Controllers
             return Ok();
         }
 
-        [HttpPatch("column")]
-        public async Task<IActionResult> UpdateColumn([FromBody] ColumnClientUpdateModel column, CancellationToken cancellationToken)
+        [HttpPatch("column/name")]
+        public async Task<IActionResult> UpdateColumnName([FromBody] ColumnClientUpdateNameModel column, CancellationToken cancellationToken)
+        {
+            return Ok();
+        }
+
+        [HttpPatch("column/position")]
+        public async Task<IActionResult> UpdateColumnPosition([FromBody] ColumnClientUpdatePositionModel column, CancellationToken cancellationToken)
         {
             return Ok();
         }
@@ -61,7 +67,7 @@ namespace Kanban.Server.Controllers
         }
 
         [HttpPatch("card")]
-        public async Task<IActionResult> UpdateCard([FromBody] CardClientUpdateModel card, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateCard([FromBody] CardClientUpdateNameModel card, CancellationToken cancellationToken)
         {
             return Ok();
         }

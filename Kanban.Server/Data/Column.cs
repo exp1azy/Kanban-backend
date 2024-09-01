@@ -13,5 +13,7 @@ namespace Kanban.Server.Data
         [Column("name")] public string Name { get; set; }
 
         [Column("position")] public int Position { get; set; }
+
+        public ICollection<Card> Cards { get; set; }
     }
 }
