@@ -29,13 +29,12 @@ namespace Kanban.Server.Repositories
             return board;
         }
 
-        public async Task AddBoardAsync(BoardClientCreateModel board, CancellationToken cancellationToken = default)
+        public async Task AddBoardAsync(BoardCreateClientModel board, CancellationToken cancellationToken = default)
         {
             await _dataContext.Boards.AddAsync(new Board
             {
                 UserId = board.UserId,
-                Name = board.Name,
-                Created = DateTime.UtcNow
+                Name = board.Name
             }, cancellationToken);
 
             await _dataContext.SaveChangesAsync(cancellationToken);
@@ -44,18 +43,22 @@ namespace Kanban.Server.Repositories
         public async Task DeleteBoardAsync(int id, CancellationToken cancellationToken = default)
         {
             var boardToDelete = await _dataContext.Boards.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
-
-            _dataContext.Boards.Remove(boardToDelete);
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (boardToDelete != null)
+            {
+                _dataContext.Boards.Remove(boardToDelete);
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }          
         }
 
-        public async Task<Board?> UpdateBoardAsync(BoardClientUpdateModel board, CancellationToken cancellationToken = default)
+        public async Task<Board?> UpdateBoardNameAsync(string name, CancellationToken cancellationToken = default)
         {
             var boardToUpdate = await _dataContext.Boards.FirstOrDefaultAsync(b => b.Id == board.Id, cancellationToken);
-            boardToUpdate.Name = board.Name;
-
-            await _dataContext.SaveChangesAsync(cancellationToken);
-
+            if (boardToUpdate != null)
+            {
+                boardToUpdate.Name = board.Name;
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }
+           
             return boardToUpdate;
         }
     }

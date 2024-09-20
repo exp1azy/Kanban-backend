@@ -12,7 +12,7 @@ namespace Kanban.Server.Models
 
         public DateTime Created { get; set; }
 
-        public List<ColumnFullModel> Columns { get; set; }
+        public List<ColumnExtendedModel> Columns { get; set; }
 
         public static BoardExtendedModel? Map(Board board) => board == null ? null : new BoardExtendedModel
         {
@@ -20,7 +20,7 @@ namespace Kanban.Server.Models
             UserId = board.UserId,
             Name = board.Name,
             Created = board.Created,
-            Columns = new List<ColumnFullModel>().AddRange(board.Columns.Select(ColumnFullModel.Map))
+            Columns = board.Columns.Select(ColumnExtendedModel.Map).ToList()!
         };
     }
 }

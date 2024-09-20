@@ -117,20 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AuthUserDataIsNull" xml:space="preserve">
-    <value>Имя и пароль пользователя при авторизации не могут быть null.</value>
-  </data>
-  <data name="EmailRegexDoNotMatch" xml:space="preserve">
-    <value>Email не соответствует формату email-адреса.</value>
-  </data>
   <data name="PasswordRegexDoNotMatch" xml:space="preserve">
     <value>Пароль должен быть длиной от 6 символов и включать хотя бы одну букву и одну цифру.</value>
   </data>
   <data name="PasswordsDoNotMatch" xml:space="preserve">
     <value>Пароли не совпадают.</value>
-  </data>
-  <data name="RegisterUserDataIsNull" xml:space="preserve">
-    <value>Данные пользователя при регистрации не могут быть null.</value>
   </data>
   <data name="UsernameRegexDoNotMatch" xml:space="preserve">
     <value>Имя пользователя должно состоять не менее, чем из 4-х латинских букв.</value>
@@ -144,37 +135,19 @@
   <data name="UserWithSpecifiedNameDoesNotExist" xml:space="preserve">
     <value>Пользователя с таким именем не существует.</value>
   </data>
-  <data name="BoardIsNull" xml:space="preserve">
+  <data name="BoardNotFound" xml:space="preserve">
     <value>Доска по указанному идентификатору не найдена.</value>
   </data>
-  <data name="UserIdLessOrEqualZero" xml:space="preserve">
-    <value>Идентификатор пользователя не может быть меньше или равен нулю.</value>
+  <data name="BoardModelIsNull" xml:space="preserve">
+    <value>Объект доски не может быть null.</value>
   </data>
-  <data name="BoardIdLessOrEqualZero" xml:space="preserve">
-    <value>Идентификатор доски не может быть меньше или равен нулю.</value>
-  </data>
-  <data name="BoardCreateModelIsNull" xml:space="preserve">
-    <value>Объект для создания доски не может быть null.</value>
-  </data>
-  <data name="BoardNameIsNullOrEmpty" xml:space="preserve">
-    <value>Имя доски не может быть пустым или null.</value>
-  </data>
-  <data name="BoardUpdateModelIsNull" xml:space="preserve">
-    <value>Объект для изменения доски не может быть null.</value>
-  </data>
-  <data name="ColumnCreateModelIsNull" xml:space="preserve">
-    <value>Объект для создания колонки не может быть null.</value>
-  </data>
-  <data name="ColumnIdLessOrEqualZero" xml:space="preserve">
-    <value>Идентификатор колонки не может быть меньше или равен нулю.</value>
-  </data>
-  <data name="ColumnNameIsNullOrEmpty" xml:space="preserve">
-    <value>Имя колонки не может быть пустым или null.</value>
-  </data>
-  <data name="ColumnPositionLessThanZero" xml:space="preserve">
-    <value>Позиция колонки не может быть меньше нуля.</value>
+  <data name="ColumnModelIsNull" xml:space="preserve">
+    <value>Объект колонки не может быть null.</value>
   </data>
   <data name="ColumnUpdateModelIsNull" xml:space="preserve">
     <value>Объект для изменения колонки не может быть null.</value>
+  </data>
+  <data name="UserModelIsNull" xml:space="preserve">
+    <value>Данные пользователя не могут быть null.</value>
   </data>
 </root>

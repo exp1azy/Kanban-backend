@@ -61,92 +61,29 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Имя и пароль пользователя при авторизации не могут быть null..
+        ///   Ищет локализованную строку, похожую на Объект доски не может быть null..
         /// </summary>
-        public static string AuthUserDataIsNull {
+        public static string BoardModelIsNull {
             get {
-                return ResourceManager.GetString("AuthUserDataIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Объект для создания доски не может быть null..
-        /// </summary>
-        public static string BoardCreateModelIsNull {
-            get {
-                return ResourceManager.GetString("BoardCreateModelIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Идентификатор доски не может быть меньше или равен нулю..
-        /// </summary>
-        public static string BoardIdLessOrEqualZero {
-            get {
-                return ResourceManager.GetString("BoardIdLessOrEqualZero", resourceCulture);
+                return ResourceManager.GetString("BoardModelIsNull", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Доска по указанному идентификатору не найдена..
         /// </summary>
-        public static string BoardIsNull {
+        public static string BoardNotFound {
             get {
-                return ResourceManager.GetString("BoardIsNull", resourceCulture);
+                return ResourceManager.GetString("BoardNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Имя доски не может быть пустым или null..
+        ///   Ищет локализованную строку, похожую на Объект колонки не может быть null..
         /// </summary>
-        public static string BoardNameIsNullOrEmpty {
+        public static string ColumnModelIsNull {
             get {
-                return ResourceManager.GetString("BoardNameIsNullOrEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Объект для изменения доски не может быть null..
-        /// </summary>
-        public static string BoardUpdateModelIsNull {
-            get {
-                return ResourceManager.GetString("BoardUpdateModelIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Объект для создания колонки не может быть null..
-        /// </summary>
-        public static string ColumnCreateModelIsNull {
-            get {
-                return ResourceManager.GetString("ColumnCreateModelIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Идентификатор колонки не может быть меньше или равен нулю..
-        /// </summary>
-        public static string ColumnIdLessOrEqualZero {
-            get {
-                return ResourceManager.GetString("ColumnIdLessOrEqualZero", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Имя колонки не может быть пустым или null..
-        /// </summary>
-        public static string ColumnNameIsNullOrEmpty {
-            get {
-                return ResourceManager.GetString("ColumnNameIsNullOrEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Позиция колонки не может быть меньше нуля..
-        /// </summary>
-        public static string ColumnPositionLessThanZero {
-            get {
-                return ResourceManager.GetString("ColumnPositionLessThanZero", resourceCulture);
+                return ResourceManager.GetString("ColumnModelIsNull", resourceCulture);
             }
         }
         
@@ -156,15 +93,6 @@ namespace Kanban.Server.Resources {
         public static string ColumnUpdateModelIsNull {
             get {
                 return ResourceManager.GetString("ColumnUpdateModelIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Email не соответствует формату email-адреса..
-        /// </summary>
-        public static string EmailRegexDoNotMatch {
-            get {
-                return ResourceManager.GetString("EmailRegexDoNotMatch", resourceCulture);
             }
         }
         
@@ -187,20 +115,11 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Данные пользователя при регистрации не могут быть null..
+        ///   Ищет локализованную строку, похожую на Данные пользователя не могут быть null..
         /// </summary>
-        public static string RegisterUserDataIsNull {
+        public static string UserModelIsNull {
             get {
-                return ResourceManager.GetString("RegisterUserDataIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Идентификатор пользователя не может быть меньше или равен нулю..
-        /// </summary>
-        public static string UserIdLessOrEqualZero {
-            get {
-                return ResourceManager.GetString("UserIdLessOrEqualZero", resourceCulture);
+                return ResourceManager.GetString("UserModelIsNull", resourceCulture);
             }
         }
         

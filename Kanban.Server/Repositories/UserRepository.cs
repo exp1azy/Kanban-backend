@@ -11,12 +11,23 @@ namespace Kanban.Server.Repositories
 
         public async Task AddUserAsync(UserClientRegisterModel user, CancellationToken cancellationToken = default)
         {
-            await _dataContext.Users.AddAsync(new User
+            var newUser = new User
             {
                 Name = user.Name,
                 Email = user.Email,
                 Password = user.Password
-            }, cancellationToken);
+            };
+
+            await _dataContext.Users.AddAsync(newUser, cancellationToken);
+            await _dataContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task UpdateUserAsync(UserNameEmailModel user, CancellationToken cancellationToken = default)
+        {
+            var userToUpdate = await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email, cancellationToken);
+
+            userToUpdate.Name = user.Name;
+            userToUpdate.Email = user.Email;
 
             await _dataContext.SaveChangesAsync(cancellationToken);
         }

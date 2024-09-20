@@ -2,7 +2,7 @@
 
 namespace Kanban.Server.Controllers.Models
 {
-    public class UserClientRegisterModel
+    public class UserNameEmailModel
     {
         [Required(ErrorMessage = ErrorMessage.UserNameIsRequired)]
         public string Name { get; set; }
@@ -10,8 +10,5 @@ namespace Kanban.Server.Controllers.Models
         [Required(ErrorMessage = ErrorMessage.EmailIsRequired)]
         [EmailAddress(ErrorMessage = ErrorMessage.InvalidEmail)]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = ErrorMessage.PasswordIsRequired)]
-        public string Password { get; set; }
     }
 }

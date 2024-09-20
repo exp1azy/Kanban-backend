@@ -24,9 +24,11 @@ namespace Kanban.Server.Repositories
         public async Task<Card?> UpdateCardNameAsync(CardClientUpdateNameModel card, CancellationToken cancellationToken = default)
         {
             var cardToUpdate = await _dataContext.Cards.FirstOrDefaultAsync(c => c.Id == card.Id, cancellationToken);
-            cardToUpdate.Name = card.Name;
-
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (cardToUpdate != null)
+            {
+                cardToUpdate.Name = card.Name;
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }            
 
             return cardToUpdate;
         }
@@ -34,9 +36,11 @@ namespace Kanban.Server.Repositories
         public async Task<Card?> UpdateCardContentAsync(CardClientUpdateContentModel card, CancellationToken cancellationToken = default)
         {
             var cardToUpdate = await _dataContext.Cards.FirstOrDefaultAsync(c => c.Id == card.Id, cancellationToken);
-            cardToUpdate.Content = card.Content;
-
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (cardToUpdate != null)
+            {
+                cardToUpdate.Content = card.Content;
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }        
 
             return cardToUpdate;
         }
@@ -44,9 +48,11 @@ namespace Kanban.Server.Repositories
         public async Task DeleteCardAsync(int id, CancellationToken cancellationToken = default)
         {
             var cardToDelete = await _dataContext.Cards.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
-
-            _dataContext.Cards.Remove(cardToDelete);
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (cardToDelete != null)
+            {
+                _dataContext.Cards.Remove(cardToDelete);
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }            
         }
     }
 }

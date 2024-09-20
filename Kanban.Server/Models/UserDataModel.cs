@@ -1,15 +1,11 @@
-﻿using Kanban.Server.Data;
-
-namespace Kanban.Server.Models
+﻿namespace Kanban.Server.Models
 {
-    public class UserModel
+    public class UserDataModel
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
         public string Email { get; set; }
-
-        public string Password { get; set; }
     }
 }

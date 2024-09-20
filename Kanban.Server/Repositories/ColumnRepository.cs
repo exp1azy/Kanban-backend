@@ -24,9 +24,11 @@ namespace Kanban.Server.Repositories
         public async Task<Column?> UpdateColumnNameAsync(ColumnClientUpdateNameModel column, CancellationToken cancellationToken = default)
         {
             var columnToUpdate = await _dataContext.Columns.FirstOrDefaultAsync(c => c.Id == column.Id, cancellationToken);
-            columnToUpdate.Name = column.Name;
-
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (columnToUpdate != null)
+            {
+                columnToUpdate.Name = column.Name;
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }          
 
             return columnToUpdate;
         }
@@ -34,9 +36,11 @@ namespace Kanban.Server.Repositories
         public async Task<Column?> UpdateColumnPositionAsync(ColumnClientUpdatePositionModel column, CancellationToken cancellationToken = default)
         {
             var columnToUpdate = await _dataContext.Columns.FirstOrDefaultAsync(c => c.Id == column.Id, cancellationToken);
-            columnToUpdate.Position = column.Position;
-
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (columnToUpdate != null)
+            {
+                columnToUpdate.Position = column.Position;
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }       
 
             return columnToUpdate;
         }
@@ -44,9 +48,11 @@ namespace Kanban.Server.Repositories
         public async Task DeleteColumnAsync(int id, CancellationToken cancellationToken = default)
         {
             var columnToDelete = await _dataContext.Columns.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
-
-            _dataContext.Columns.Remove(columnToDelete);
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            if (columnToDelete != null )
+            {
+                _dataContext.Columns.Remove(columnToDelete);
+                await _dataContext.SaveChangesAsync(cancellationToken);
+            }          
         }
     }
 }

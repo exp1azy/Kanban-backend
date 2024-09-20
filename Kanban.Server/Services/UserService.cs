@@ -16,7 +16,7 @@ namespace Kanban.Server.Services
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IConfiguration _config = config;
 
-        public string GenerateToken(string name, string email)
+        public string GenerateToken(UserDataModel user)
         {
             var jwtConfig = _config.GetSection("Jwt");
 
@@ -25,8 +25,9 @@ namespace Kanban.Server.Services
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, name),
-                new Claim(ClaimTypes.Email, email)
+                new Claim("user_id", user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
             var token = new JwtSecurityToken(
@@ -40,25 +41,27 @@ namespace Kanban.Server.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<UserModel> AuthenticateAsync(string username, string password, CancellationToken cancellationToken = default)
+        public async Task<UserDataModel> AuthenticateAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            if (username == null || password == null)
-                throw new ApplicationException(Error.AuthUserDataIsNull);
-
-            var existUser = await _userRepository.GetUserByNameAsync(username, cancellationToken) 
+            var existUser = await _userRepository.GetUserByEmailAsync(email, cancellationToken) 
                 ?? throw new ApplicationException(Error.UserWithSpecifiedNameDoesNotExist);
 
             var isPasswordCorrect = PasswordHashHelper.VerifyPassword(password, existUser.Password);
             if (!isPasswordCorrect)
                 throw new ApplicationException(Error.PasswordsDoNotMatch);
 
-            return UserModel.Map(existUser)!;
+            return new UserDataModel
+            {
+                Id = existUser.Id,
+                Name = existUser.Name,
+                Email = existUser.Email
+            };
         }
 
-        public async Task CreateUserAsync(UserClientRegisterModel userModel, CancellationToken cancellationToken = default)
+        public async Task<UserNameEmailModel> CreateUserAsync(UserClientRegisterModel userModel, CancellationToken cancellationToken = default)
         {
             if (userModel == null) 
-                throw new ApplicationException(Error.RegisterUserDataIsNull);
+                throw new ApplicationException(Error.UserModelIsNull);
 
             var existUserByName = await _userRepository.GetUserByNameAsync(userModel.Name, cancellationToken);
             if (existUserByName != null)
@@ -74,12 +77,23 @@ namespace Kanban.Server.Services
             if (!PasswordRegex().IsMatch(userModel.Password))
                 throw new ApplicationException(Error.PasswordRegexDoNotMatch);
 
-            if (!EmailRegex().IsMatch(userModel.Email))
-                throw new ApplicationException(Error.EmailRegexDoNotMatch);
-
             userModel.Password = PasswordHashHelper.HashPassword(userModel.Password);
 
             await _userRepository.AddUserAsync(userModel, cancellationToken);
+
+            return new UserNameEmailModel
+            { 
+                Email = userModel.Email, 
+                Name = userModel.Name
+            };
+        }
+
+        public async Task UpdateUserAsync(UserNameEmailModel userModel, CancellationToken cancellationToken = default)
+        {
+            if (userModel == null)
+                throw new ApplicationException(Error.UserModelIsNull);
+
+            await _userRepository.UpdateUserAsync(userModel, cancellationToken);
         }
 
         [GeneratedRegex(@"^[a-zA-Z]{4,}$")]
@@ -87,8 +101,5 @@ namespace Kanban.Server.Services
 
         [GeneratedRegex(@"^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$")]
         private static partial Regex PasswordRegex();
-
-        [GeneratedRegex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")]
-        private static partial Regex EmailRegex();
     }
 }
