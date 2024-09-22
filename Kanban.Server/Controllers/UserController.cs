@@ -53,7 +53,7 @@ namespace Kanban.Server.Controllers
 
         [Authorize]
         [HttpGet("users/me")]
-        public async Task<IActionResult> GetUser(CancellationToken cancellationToken)
+        public IActionResult GetUser()
         {
             try
             {
