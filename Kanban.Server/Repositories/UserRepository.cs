@@ -1,6 +1,7 @@
 ﻿using Kanban.Server.Controllers.Models;
 using Kanban.Server.Data;
 using Kanban.Server.Repositories.Interfaces;
+using Kanban.Server.Resources;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kanban.Server.Repositories
@@ -9,7 +10,7 @@ namespace Kanban.Server.Repositories
     {
         private readonly DataContext _dataContext = dataContext;
 
-        public async Task AddUserAsync(UserClientRegisterModel user, CancellationToken cancellationToken = default)
+        public async Task AddUserAsync(UserRegisterClientModel user, CancellationToken cancellationToken = default)
         {
             var newUser = new User
             {
@@ -22,9 +23,10 @@ namespace Kanban.Server.Repositories
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateUserAsync(UserNameEmailModel user, CancellationToken cancellationToken = default)
+        public async Task UpdateUserAsync(UserUpdateClientModel user, CancellationToken cancellationToken = default)
         {
-            var userToUpdate = await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email, cancellationToken);
+            var userToUpdate = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == user.Id, cancellationToken)
+                ?? throw new ApplicationException(Error.UserNotFound);
 
             userToUpdate.Name = user.Name;
             userToUpdate.Email = user.Email;

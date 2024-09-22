@@ -30,11 +30,11 @@ namespace Kanban.Server.Repositories
             return board;
         }
 
-        public async Task AddBoardAsync(BoardCreateClientModel board, CancellationToken cancellationToken = default)
+        public async Task AddBoardAsync(int userId, BoardCreateClientModel board, CancellationToken cancellationToken = default)
         {
             var boardToCreate = new Board
             {
-                UserId = board.UserId,
+                UserId = userId,
                 Name = board.Name
             };
 
@@ -53,10 +53,17 @@ namespace Kanban.Server.Repositories
                     .FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
                     ?? throw new ApplicationException(Error.BoardNotFound);
 
-                foreach (var column in boardToDelete.Columns)
-                    _dataContext.Cards.RemoveRange(column.Cards);
+                if (boardToDelete.Columns.Count != 0)
+                {
+                    foreach (var column in boardToDelete.Columns)
+                    {
+                        if (column.Cards.Count != 0)
+                            _dataContext.Cards.RemoveRange(column.Cards);
+                    }
 
-                _dataContext.Columns.RemoveRange(boardToDelete.Columns);
+                    _dataContext.Columns.RemoveRange(boardToDelete.Columns);
+                }               
+               
                 _dataContext.Boards.Remove(boardToDelete);
                 await _dataContext.SaveChangesAsync(cancellationToken);
 

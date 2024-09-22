@@ -13,7 +13,7 @@ namespace Kanban.Server.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] UserClientAuthModel user, CancellationToken cancellationToken)
+        public async Task<IActionResult> SignIn([FromBody] UserAuthClientModel user, CancellationToken cancellationToken)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace Kanban.Server.Controllers
             }
             catch (ApplicationException ex)
             {
-                return Unauthorized(ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace Kanban.Server.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] UserClientRegisterModel user, CancellationToken cancellationToken)
+        public async Task<IActionResult> SignUp([FromBody] UserRegisterClientModel user, CancellationToken cancellationToken)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Kanban.Server.Controllers
 
         [Authorize]
         [HttpPatch("users/me")]
-        public async Task<IActionResult> UpdateUser([FromBody] UserNameEmailModel user, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateClientModel user, CancellationToken cancellationToken)
         {
             try
             {

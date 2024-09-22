@@ -2,8 +2,12 @@
 
 namespace Kanban.Server.Controllers.Models
 {
-    public class UserNameEmailModel
+    public class UserUpdateClientModel
     {
+        [Required(ErrorMessage = ErrorMessage.UserIdIsRequired)]
+        [Range(1, int.MaxValue, ErrorMessage = ErrorMessage.UserIdMustBeGreaterThanZero)]
+        public int Id { get; set; }
+
         [Required(ErrorMessage = ErrorMessage.UserNameIsRequired)]
         public string Name { get; set; }
 

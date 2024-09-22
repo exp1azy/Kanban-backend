@@ -88,6 +88,15 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Колонка с указанной позицией уже существует для текущей доски..
+        /// </summary>
+        public static string ColumnWithSpecifiedPositionAlreadyExist {
+            get {
+                return ResourceManager.GetString("ColumnWithSpecifiedPositionAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Указанный и фактический пароли не совпадают..
         /// </summary>
         public static string IncorrectPassword {
@@ -111,6 +120,15 @@ namespace Kanban.Server.Resources {
         public static string UsernameRegexDoNotMatch {
             get {
                 return ResourceManager.GetString("UsernameRegexDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пользователя с указанным идентификатором не существует..
+        /// </summary>
+        public static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
         

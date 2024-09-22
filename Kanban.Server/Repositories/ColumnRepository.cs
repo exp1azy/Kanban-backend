@@ -12,6 +12,13 @@ namespace Kanban.Server.Repositories
 
         public async Task AddColumnAsync(ColumnCreateClientModel columnModel, CancellationToken cancellationToken = default)
         {
+            var isThereColumnWithSamePosition = await _dataContext.Columns.AnyAsync(c =>
+                c.BoardId == columnModel.BoardId 
+                && c.Position == columnModel.Position, cancellationToken);
+
+            if (isThereColumnWithSamePosition)
+                throw new ApplicationException(Error.ColumnWithSpecifiedPositionAlreadyExist);
+
             var columnToCreate = new Column
             {
                 BoardId = columnModel.BoardId,
@@ -25,17 +32,46 @@ namespace Kanban.Server.Repositories
 
         public async Task DeleteColumnAsync(int id, CancellationToken cancellationToken = default)
         {
-            var columnToDelete = await _dataContext.Columns.FirstOrDefaultAsync(c => c.Id == id, cancellationToken)
-                ?? throw new ApplicationException(Error.ColumnNotFound);
+            using var trans = await _dataContext.Database.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                var columnToDelete = await _dataContext.Columns
+                    .Include(c => c.Cards)
+                    .FirstOrDefaultAsync(c => c.Id == id, cancellationToken)
+                    ?? throw new ApplicationException(Error.ColumnNotFound);
 
-            _dataContext.Columns.Remove(columnToDelete);
-            await _dataContext.SaveChangesAsync(cancellationToken);
+                if (columnToDelete.Cards.Count != 0)
+                    _dataContext.Cards.RemoveRange(columnToDelete.Cards);
+
+                _dataContext.Columns.Remove(columnToDelete);
+                await _dataContext.SaveChangesAsync(cancellationToken);
+
+                await trans.CommitAsync(cancellationToken);
+            }
+            catch (Exception)
+            {
+                await trans.RollbackAsync(cancellationToken);
+                throw;
+            }
+        }
+
+        public async Task<Column?> GetColumnAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _dataContext.Columns.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
 
         public async Task<Column> UpdateColumnAsync(ColumnUpdateClientModel columnModel, CancellationToken cancellationToken = default)
         {
             var columnToUpdate = await _dataContext.Columns.FirstOrDefaultAsync(c => c.Id == columnModel.Id, cancellationToken)
                 ?? throw new ApplicationException(Error.ColumnNotFound);
+
+            var isThereColumnWithSamePosition = await _dataContext.Columns.AnyAsync(c =>
+                c.BoardId == columnToUpdate.BoardId
+                && c.Position == columnModel.Position
+                && c.Id != columnModel.Id, cancellationToken);
+
+            if (isThereColumnWithSamePosition)
+                throw new ApplicationException(Error.ColumnWithSpecifiedPositionAlreadyExist);
 
             columnToUpdate.Name = columnModel.Name;
             columnToUpdate.Position = columnModel.Position;

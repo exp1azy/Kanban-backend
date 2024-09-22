@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kanban.Server.Data
 {
-    [Table("board")]
+    [Table("kanban_board")]
     public class Board
     {
         [Key][Column("id")] public int Id { get; set; }

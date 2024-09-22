@@ -11,8 +11,8 @@ namespace Kanban.Server.Repositories.Interfaces
 
         public Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken = default);
 
-        public Task AddUserAsync(UserClientRegisterModel user, CancellationToken cancellationToken = default);
+        public Task AddUserAsync(UserRegisterClientModel user, CancellationToken cancellationToken = default);
 
-        public Task UpdateUserAsync(UserNameEmailModel user, CancellationToken cancellationToken = default);
+        public Task UpdateUserAsync(UserUpdateClientModel user, CancellationToken cancellationToken = default);
     }
 }

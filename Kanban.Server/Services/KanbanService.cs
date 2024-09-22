@@ -6,25 +6,46 @@ using Kanban.Server.Services.Interfaces;
 
 namespace Kanban.Server.Services
 {
-    public class KanbanService(IBoardRepository boardRepository, IColumnRepository columnRepository, ICardRepository cardRepository) : IKanbanService
+    public class KanbanService(
+        IUserRepository userRepository, 
+        IBoardRepository boardRepository, 
+        IColumnRepository columnRepository, 
+        ICardRepository cardRepository) : IKanbanService
     {
+        private readonly IUserRepository _userRepository = userRepository;
         private readonly IBoardRepository _boardRepository = boardRepository;
         private readonly IColumnRepository _columnRepository = columnRepository;
         private readonly ICardRepository _cardRepository = cardRepository;
 
-        public async Task AddBoardAsync(BoardCreateClientModel boardModel, CancellationToken cancellationToken = default)
+        public async Task AddBoardAsync(int userId, BoardCreateClientModel boardModel, CancellationToken cancellationToken = default)
         {
-            await _boardRepository.AddBoardAsync(boardModel, cancellationToken);
+            _ = await _userRepository.GetUserByIdAsync(userId, cancellationToken)
+                ?? throw new ApplicationException(Error.UserNotFound);
+
+            await _boardRepository.AddBoardAsync(userId, boardModel, cancellationToken);
         }
 
         public async Task AddCardAsync(CardCreateClientModel cardModel, CancellationToken cancellationToken = default)
         {
+            _ = await _columnRepository.GetColumnAsync(cardModel.ColumnId, cancellationToken)
+                ?? throw new ApplicationException(Error.ColumnNotFound);
+
             await _cardRepository.AddCardAsync(cardModel, cancellationToken);
         }
 
         public async Task AddColumnAsync(ColumnCreateClientModel columnModel, CancellationToken cancellationToken = default)
         {
-            await _columnRepository.AddColumnAsync(columnModel, cancellationToken);
+            _ = await _boardRepository.GetBoardAsync(columnModel.BoardId, cancellationToken)
+                ?? throw new ApplicationException(Error.BoardNotFound);
+
+            try
+            {
+                await _columnRepository.AddColumnAsync(columnModel, cancellationToken);
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
         public async Task DeleteBoardAsync(int id, CancellationToken cancellationToken = default)
@@ -57,7 +78,7 @@ namespace Kanban.Server.Services
             {
                 await _columnRepository.DeleteColumnAsync(id, cancellationToken);
             }
-            catch (ApplicationException)
+            catch (Exception)
             {
                 throw;
             }

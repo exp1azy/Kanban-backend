@@ -58,7 +58,7 @@ namespace Kanban.Server.Services
             };
         }
 
-        public async Task CreateUserAsync(UserClientRegisterModel userModel, CancellationToken cancellationToken = default)
+        public async Task CreateUserAsync(UserRegisterClientModel userModel, CancellationToken cancellationToken = default)
         {
             var existUserByName = await _userRepository.GetUserByNameAsync(userModel.Name, cancellationToken);
             if (existUserByName != null)
@@ -79,9 +79,16 @@ namespace Kanban.Server.Services
             await _userRepository.AddUserAsync(userModel, cancellationToken);
         }
 
-        public async Task UpdateUserAsync(UserNameEmailModel userModel, CancellationToken cancellationToken = default)
+        public async Task UpdateUserAsync(UserUpdateClientModel userModel, CancellationToken cancellationToken = default)
         {
-            await _userRepository.UpdateUserAsync(userModel, cancellationToken);
+            try
+            {
+                await _userRepository.UpdateUserAsync(userModel, cancellationToken);
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
         [GeneratedRegex(@"^[a-zA-Z]{4,}$")]

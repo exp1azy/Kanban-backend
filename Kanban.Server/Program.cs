@@ -1,8 +1,5 @@
 using Kanban.Server.Data;
 using Kanban.Server.Startup;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace Kanban.Server
 {
@@ -12,7 +9,7 @@ namespace Kanban.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.AddSwagger();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddControllers();
             builder.Services.AddDbContext<DataContext>();
             builder.Services.AddAuthorization();
@@ -28,8 +25,8 @@ namespace Kanban.Server
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllers();
             app.Run();
         }

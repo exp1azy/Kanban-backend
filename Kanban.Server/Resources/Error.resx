@@ -144,4 +144,10 @@
   <data name="ColumnNotFound" xml:space="preserve">
     <value>Колонки с указанными идентификатором не существует.</value>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Пользователя с указанным идентификатором не существует.</value>
+  </data>
+  <data name="ColumnWithSpecifiedPositionAlreadyExist" xml:space="preserve">
+    <value>Колонка с указанной позицией уже существует для текущей доски.</value>
+  </data>
 </root>

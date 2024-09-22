@@ -2,11 +2,8 @@
 
 namespace Kanban.Server.Controllers.Models
 {
-    public class UserClientRegisterModel
+    public class UserAuthClientModel
     {
-        [Required(ErrorMessage = ErrorMessage.UserNameIsRequired)]
-        public string Name { get; set; }
-
         [Required(ErrorMessage = ErrorMessage.EmailIsRequired)]
         [EmailAddress(ErrorMessage = ErrorMessage.InvalidEmail)]
         public string Email { get; set; }

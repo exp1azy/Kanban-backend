@@ -88,7 +88,7 @@ namespace Kanban.Server.Controllers
             {
                 await _kanbanService.DeleteCardAsync(id, cancellationToken);
 
-                return Ok();
+                return Ok("Карточка удалена.");
             }
             catch (ApplicationException ex)
             {
@@ -105,9 +105,13 @@ namespace Kanban.Server.Controllers
         {
             try
             {
-                await _kanbanService.AddBoardAsync(boardModel, cancellationToken);
+                await _kanbanService.AddBoardAsync(HttpContext.GetCurrentUser().Id, boardModel, cancellationToken);
 
                 return Ok();
+            }
+            catch (ApplicationException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -141,7 +145,7 @@ namespace Kanban.Server.Controllers
             {
                 await _kanbanService.DeleteBoardAsync(id, cancellationToken);
 
-                return Ok();
+                return Ok("Доска удалена.");
             }
             catch (ApplicationException ex)
             {
@@ -161,6 +165,10 @@ namespace Kanban.Server.Controllers
                 await _kanbanService.AddColumnAsync(columnModel, cancellationToken);
 
                 return Ok();
+            }
+            catch (ApplicationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -194,7 +202,7 @@ namespace Kanban.Server.Controllers
             {
                 await _kanbanService.DeleteColumnAsync(id, cancellationToken);
 
-                return Ok();
+                return Ok("Колонка удалена.");
             }
             catch (ApplicationException ex)
             {
