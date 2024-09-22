@@ -11,19 +11,19 @@ namespace Kanban.Server.Services.Interfaces
 
         public Task AddBoardAsync(BoardCreateClientModel boardModel, CancellationToken cancellationToken = default);
 
-        public Task<BoardModel?> UpdateBoardAsync(BoardUpdateClientModel boardModel, CancellationToken cancellationToken = default);
+        public Task<BoardModel> UpdateBoardAsync(BoardUpdateClientModel boardModel, CancellationToken cancellationToken = default);
 
         public Task DeleteBoardAsync(int id, CancellationToken cancellationToken = default);
 
         public Task AddColumnAsync(ColumnCreateClientModel columnModel, CancellationToken cancellationToken = default);
 
-        public Task<ColumnModel?> UpdateColumnAsync(ColumnUpdateClientModel columnModel, CancellationToken cancellationToken = default);
+        public Task<ColumnModel> UpdateColumnAsync(ColumnUpdateClientModel columnModel, CancellationToken cancellationToken = default);
 
         public Task DeleteColumnAsync(int id, CancellationToken cancellationToken = default);
 
-        public Task AddCardAsync(CardCreateUpdateClientModel cardModel, CancellationToken cancellationToken = default);
+        public Task AddCardAsync(CardCreateClientModel cardModel, CancellationToken cancellationToken = default);
 
-        public Task<CardModel?> UpdateCardAsync(CardCreateUpdateClientModel cardModel, CancellationToken cancellationToken = default);
+        public Task<CardModel> UpdateCardAsync(CardUpdateClientModel cardModel, CancellationToken cancellationToken = default);
 
         public Task DeleteCardAsync(int id, CancellationToken cancellationToken = default);
     }

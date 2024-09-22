@@ -7,7 +7,7 @@ namespace Kanban.Server.Services.Interfaces
     {
         public string GenerateToken(UserDataModel user);
 
-        public Task<UserNameEmailModel> CreateUserAsync(UserClientRegisterModel userClientFullModel, CancellationToken cancellationToken = default);
+        public Task CreateUserAsync(UserClientRegisterModel userClientFullModel, CancellationToken cancellationToken = default);
 
         public Task<UserDataModel> AuthenticateAsync(string email, string password, CancellationToken cancellationToken = default);
 

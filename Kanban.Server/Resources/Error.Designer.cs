@@ -61,16 +61,7 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Объект доски не может быть null..
-        /// </summary>
-        public static string BoardModelIsNull {
-            get {
-                return ResourceManager.GetString("BoardModelIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Доска по указанному идентификатору не найдена..
+        ///   Ищет локализованную строку, похожую на Доски с указанным идентификатором не существует..
         /// </summary>
         public static string BoardNotFound {
             get {
@@ -79,25 +70,34 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Объект колонки не может быть null..
+        ///   Ищет локализованную строку, похожую на Карточки с указанным идентификатором не существует..
         /// </summary>
-        public static string ColumnModelIsNull {
+        public static string CardNotFound {
             get {
-                return ResourceManager.GetString("ColumnModelIsNull", resourceCulture);
+                return ResourceManager.GetString("CardNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Объект для изменения колонки не может быть null..
+        ///   Ищет локализованную строку, похожую на Колонки с указанными идентификатором не существует..
         /// </summary>
-        public static string ColumnUpdateModelIsNull {
+        public static string ColumnNotFound {
             get {
-                return ResourceManager.GetString("ColumnUpdateModelIsNull", resourceCulture);
+                return ResourceManager.GetString("ColumnNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Пароль должен быть длиной от 6 символов и включать хотя бы одну букву и одну цифру..
+        ///   Ищет локализованную строку, похожую на Указанный и фактический пароли не совпадают..
+        /// </summary>
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Указанный пароль пользователя не соответствует формату..
         /// </summary>
         public static string PasswordRegexDoNotMatch {
             get {
@@ -106,25 +106,7 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Пароли не совпадают..
-        /// </summary>
-        public static string PasswordsDoNotMatch {
-            get {
-                return ResourceManager.GetString("PasswordsDoNotMatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Данные пользователя не могут быть null..
-        /// </summary>
-        public static string UserModelIsNull {
-            get {
-                return ResourceManager.GetString("UserModelIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Имя пользователя должно состоять не менее, чем из 4-х латинских букв..
+        ///   Ищет локализованную строку, похожую на Указанное имя пользователя не соответствует формату..
         /// </summary>
         public static string UsernameRegexDoNotMatch {
             get {
@@ -133,7 +115,7 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Пользователь с указанным email уже существует..
+        ///   Ищет локализованную строку, похожую на Пользователь с указанным email-адресом уже существует..
         /// </summary>
         public static string UserWithSpecifiedEmailAlreadyExist {
             get {
@@ -151,7 +133,7 @@ namespace Kanban.Server.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Пользователя с таким именем не существует..
+        ///   Ищет локализованную строку, похожую на Пользователя с указанным именем не существует..
         /// </summary>
         public static string UserWithSpecifiedNameDoesNotExist {
             get {

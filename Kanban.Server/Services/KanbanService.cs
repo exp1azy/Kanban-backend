@@ -6,10 +6,7 @@ using Kanban.Server.Services.Interfaces;
 
 namespace Kanban.Server.Services
 {
-    public class KanbanService(
-        IBoardRepository boardRepository,
-        IColumnRepository columnRepository,
-        ICardRepository cardRepository) : IKanbanService
+    public class KanbanService(IBoardRepository boardRepository, IColumnRepository columnRepository, ICardRepository cardRepository) : IKanbanService
     {
         private readonly IBoardRepository _boardRepository = boardRepository;
         private readonly IColumnRepository _columnRepository = columnRepository;
@@ -17,57 +14,107 @@ namespace Kanban.Server.Services
 
         public async Task AddBoardAsync(BoardCreateClientModel boardModel, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await _boardRepository.AddBoardAsync(boardModel, cancellationToken);
         }
 
-        public Task AddCardAsync(CardCreateUpdateClientModel cardModel, CancellationToken cancellationToken = default)
+        public async Task AddCardAsync(CardCreateClientModel cardModel, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await _cardRepository.AddCardAsync(cardModel, cancellationToken);
         }
 
-        public Task AddColumnAsync(ColumnCreateClientModel columnModel, CancellationToken cancellationToken = default)
+        public async Task AddColumnAsync(ColumnCreateClientModel columnModel, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await _columnRepository.AddColumnAsync(columnModel, cancellationToken);
         }
 
-        public Task DeleteBoardAsync(int id, CancellationToken cancellationToken = default)
+        public async Task DeleteBoardAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _boardRepository.DeleteBoardAsync(id, cancellationToken);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task DeleteCardAsync(int id, CancellationToken cancellationToken = default)
+        public async Task DeleteCardAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _cardRepository.DeleteCardAsync(id, cancellationToken);
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
-        public Task DeleteColumnAsync(int id, CancellationToken cancellationToken = default)
+        public async Task DeleteColumnAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _columnRepository.DeleteColumnAsync(id, cancellationToken);
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
-        public Task<IEnumerable<BoardModel>> GetAllUserBoardsAsync(int userId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<BoardModel>> GetAllUserBoardsAsync(int userId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var boards = await _boardRepository.GetAllUserBoardsAsync(userId, cancellationToken);
+
+            return boards.Any() ? boards.Select(BoardModel.Map) : [];
         }
 
-        public Task<BoardExtendedModel> GetBoardAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<BoardExtendedModel> GetBoardAsync(int id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var board = await _boardRepository.GetBoardAsync(id, cancellationToken)
+                ?? throw new ApplicationException(Error.BoardNotFound);
+
+            return BoardExtendedModel.Map(board)!;
         }
 
-        public Task<BoardModel?> UpdateBoardAsync(BoardUpdateClientModel boardModel, CancellationToken cancellationToken = default)
+        public async Task<BoardModel> UpdateBoardAsync(BoardUpdateClientModel boardModel, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var updatedBoard = await _boardRepository.UpdateBoardAsync(boardModel, cancellationToken);
+                return BoardModel.Map(updatedBoard)!;
+            }
+            catch (ApplicationException) 
+            { 
+                throw; 
+            }
         }
 
-        public Task<CardModel?> UpdateCardAsync(CardCreateUpdateClientModel cardModel, CancellationToken cancellationToken = default)
+        public async Task<CardModel> UpdateCardAsync(CardUpdateClientModel cardModel, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var updatedCard = await _cardRepository.UpdateCardAsync(cardModel, cancellationToken);
+                return CardModel.Map(updatedCard)!;
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
 
-        public Task<ColumnModel?> UpdateColumnAsync(ColumnUpdateClientModel columnModel, CancellationToken cancellationToken = default)
+        public async Task<ColumnModel> UpdateColumnAsync(ColumnUpdateClientModel columnModel, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var updatedColumn = await _columnRepository.UpdateColumnAsync(columnModel, cancellationToken);
+                return ColumnModel.Map(updatedColumn)!;
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
         }
     }
 }

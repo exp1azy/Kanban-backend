@@ -2,7 +2,7 @@
 
 namespace Kanban.Server.Controllers.Models
 {
-    public class CardCreateUpdateClientModel
+    public class CardCreateClientModel
     {
         [Required(ErrorMessage = ErrorMessage.CardNameIsRequired)]
         public string Name { get; set; }
@@ -10,7 +10,7 @@ namespace Kanban.Server.Controllers.Models
         public string? Content { get; set; }
 
         [Required(ErrorMessage = ErrorMessage.ColumnIdIsRequired)]
-        [Range(1, int.MaxValue)]
+        [Range(1, int.MaxValue, ErrorMessage = ErrorMessage.ColumnIdMustBeGreaterThanZero)]
         public int ColumnId { get; set; }
     }
 }

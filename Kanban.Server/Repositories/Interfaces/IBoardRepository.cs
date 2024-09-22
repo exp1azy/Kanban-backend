@@ -9,9 +9,9 @@ namespace Kanban.Server.Repositories.Interfaces
 
         public Task<Board?> GetBoardAsync(int id, CancellationToken cancellationToken = default);
 
-        public Task AddBoardAsync(BoardClientCreateModel board, CancellationToken cancellationToken = default);
+        public Task AddBoardAsync(BoardCreateClientModel board, CancellationToken cancellationToken = default);
 
-        public Task<Board?> UpdateBoardAsync(BoardClientUpdateModel board, CancellationToken cancellationToken = default);
+        public Task<Board> UpdateBoardAsync(BoardUpdateClientModel board, CancellationToken cancellationToken = default);
 
         public Task DeleteBoardAsync(int id, CancellationToken cancellationToken = default);
     }

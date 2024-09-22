@@ -7,7 +7,7 @@ namespace Kanban.Server.Extensions
     {
         public static UserDataModel GetCurrentUser(this HttpContext context)
         {
-            var parsed = int.TryParse(context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out var userId);
+            var parsed = int.TryParse(context.User.Claims.FirstOrDefault(c => c.Type == "user_id")?.Value, out var userId);
             if (!parsed)
                 throw new ApplicationException();
 

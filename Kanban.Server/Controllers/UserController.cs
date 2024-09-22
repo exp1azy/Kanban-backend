@@ -1,6 +1,7 @@
 ﻿using Kanban.Server.Controllers.Models;
 using Kanban.Server.Extensions;
 using Kanban.Server.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kanban.Server.Controllers
@@ -10,25 +11,6 @@ namespace Kanban.Server.Controllers
     public class UserController(IUserService userService) : Controller
     {
         private readonly IUserService _userService = userService;
-
-        [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] UserClientRegisterModel user, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var userModel = await _userService.CreateUserAsync(user, cancellationToken);
-
-                return Ok(userModel);
-            }
-            catch (ApplicationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
 
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] UserClientAuthModel user, CancellationToken cancellationToken)
@@ -50,6 +32,26 @@ namespace Kanban.Server.Controllers
             }
         }
 
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] UserClientRegisterModel user, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _userService.CreateUserAsync(user, cancellationToken);
+
+                return Ok();
+            }
+            catch (ApplicationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpGet("users/me")]
         public async Task<IActionResult> GetUser(CancellationToken cancellationToken)
         {
@@ -67,6 +69,7 @@ namespace Kanban.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPatch("users/me")]
         public async Task<IActionResult> UpdateUser([FromBody] UserNameEmailModel user, CancellationToken cancellationToken)
         {
