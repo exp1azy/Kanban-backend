@@ -88,7 +88,7 @@ namespace Kanban.Server.Services
         {
             var boards = await _boardRepository.GetAllUserBoardsAsync(userId, cancellationToken);
 
-            return boards.Any() ? boards.Select(BoardModel.Map) : [];
+            return boards.Select(BoardModel.Map)!;
         }
 
         public async Task<BoardExtendedModel> GetBoardAsync(int id, CancellationToken cancellationToken = default)
